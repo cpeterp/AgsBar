@@ -1,0 +1,206 @@
+$bg: rgb(50, 50, 50);
+$alt_bg: rgb(25, 25, 25);
+$fg: rgba(255, 255, 255, 1);
+$bg_border: rgb(100, 100, 100);
+$fg_alt: rgba(255, 255, 255, 0.5);
+$shadow: rgba(#000000, 0.3);
+$border_col: rgba(#cccccc, 0.18);
+$best_so_far: rgba(255, 255, 255, 0.1);
+$accent_color: rgba(0, 255, 0, 0.2);
+$accent_highlight: rgb(80, 255, 80);
+
+* {
+  color: $fg;
+}
+
+.bar {
+  all: unset;
+  background-color: transparent;
+}
+
+.main-container {
+  all: unset;
+  padding: 5px 5px 5px 5px;
+  background-color: $bg;
+  font-size: 16px;
+  font-family: JetBrains Mono;
+}
+
+.bar-box {
+  all: unset;
+  left, middle, right {
+    >label {
+      all: unset;
+    }
+  }
+}
+
+.workspaces {
+  all: unset;
+  margin: 0px 5px;
+  
+  button {
+    all: unset;
+    margin: 0px 4px;
+    min-width: 0px;
+    min-height: 0px;
+  }
+  
+  .workspace-symbol {
+    all: unset;
+    outline: 1.5px solid $fg;
+    border-radius: 50%;
+    border-width: 0px;
+    min-height: 10px;
+    min-width: 10px;
+    transition: outline-width 300ms ease;
+    transition: background-color 300ms ease;
+    
+    &:hover {
+      outline-width: 2.5px;
+    }
+  }
+
+  .focused .workspace-symbol {
+    background-color: $fg;
+  }
+}
+
+#quick-access-bar {
+  all: unset;
+  padding: 0px;
+}
+
+.spacer {
+  margin: 0px 6px;
+}
+#right-spacer {
+  margin-right: 0px;
+}
+
+#sys-tray {
+  all: unset;
+}
+
+#date {
+  all: unset;
+  margin: 0px;
+}
+
+button.quick-access-icon, .quick-access-icon>button {
+  all: unset;
+  margin: 0px 1px;
+  padding: 2px 3px;
+  border-radius: 4px;
+
+  transition: background-color 300ms ease;
+  &:hover {
+    background-color: $accent_color;
+  }
+}
+
+#battery-btn {
+  // Color needs to apply to the image underneath the button
+  // Order matters, last one will be applied if both are present
+  &.battery-low * {
+    color: rgb(235, 220, 91);
+  }
+  &.battery-critical * {
+    color: rgb(255, 31, 31);
+  }
+}
+
+tooltip {
+  font-size: 16px;
+  background-color: $alt_bg;
+  font-family: JetBrains Mono;
+}
+
+.volume-popover-mute-btn {
+  all: unset;
+  margin: 0px 2px;
+  padding: 2px;
+  border-radius: 4px;
+  transition: background-color 300ms ease;
+  &:hover {
+    background-color: $accent_color;
+  }
+}
+
+#power-btn {
+  margin: 0px;
+  >button {
+    padding: 2px 8px;
+  }
+}
+
+#power-btn-menu {
+  //min-width: 150px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.power-btn-menu-item {
+  all: unset;
+  padding: 4px;
+  margin: 0px;
+  font-size: 16px;
+  border-radius: 4px;
+
+  transition: background-color 300ms ease;
+  &:hover {
+    background-color: $accent_color;
+  }
+
+  image {
+    all: unset;
+    margin-right: 6px;
+  }
+}
+
+scale {
+  // all: unset; //Unsets everything so you can style everything from scratch
+  // $slider_height: 4px;
+  $slider_bg: rgb(160, 160, 160);
+  $slider_highlight: rgb(240, 240, 240);
+  $slider_marker_color: rgb(82, 179, 111);
+  $slider_marker_border: rgb(57, 125, 78);
+  // $slider_marker_size: 10px;
+
+  min-width: 150px;
+  //margin: 4px;
+  // padding-top: $slider_marker_size - $slider_height;
+  // padding-bottom: $slider_marker_size - $slider_height;
+  // padding-left: $slider_marker_size - $slider_height/2;
+  // padding-right: $slider_marker_size - $slider_height/2;
+
+  trough {
+    // min-height: $slider_height;
+    border-style: solid;
+    // border-width: $slider_height/2;
+    border-color: $slider_bg;
+    // border-radius: $slider_height;
+    background-color: $slider_bg;
+    // padding: 0px;
+  }
+
+  highlight {
+    // min-height: $slider_height;
+    // border-style: solid;
+    // border-width: $slider_height/2;
+    // border-color: $slider_highlight;
+    // border-radius: $slider_height;
+    // margin: $slider_height/2;
+    background-color: $slider_highlight;
+  }
+
+  slider {
+    // border-style: solid;
+    // border-radius: $slider_marker_size;
+    // border-width: 1px;
+    border-color: $slider_marker_border;
+    // margin: -$slider_marker_size;
+    background-color: $slider_marker_color;
+    // background-image: none;
+  }
+}
