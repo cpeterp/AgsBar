@@ -35,6 +35,7 @@ export default function VolumeBtn() {
     name="volume-btn"
     tooltipText={bind(speaker, "volume").as(vol => `Volume ${Math.floor(vol*100)}%`)}
     iconName={bind(speaker_icon)}
+    onDestroy={() => {speaker_icon.drop()}}
     popover={ Popover(
       {
         autohide: true,

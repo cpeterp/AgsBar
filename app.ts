@@ -24,6 +24,9 @@ exec(`sassc ${scss} ${css}`)
 App.start({
     css: css,
     main() {
+        // Create initial bars and watch for new monitors
+        // Bar widget handles destruction when monitor is remoed
         hypr.get_monitors().map(monitor => Bar(monitor.id))
-    },
+        hypr.connect('monitor-added', (_source, monitor) => Bar(monitor.id))
+    }
 })

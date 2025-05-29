@@ -1,5 +1,7 @@
 import { App, Astal, Gtk } from "astal/gtk4"
 import { Variable } from "astal"
+import Hyprland from "gi://AstalHyprland"
+
 import { MAIN_MONITOR } from "../user_config"
 import SystemTray from "./SystemTray"
 import BrightnessBtn from "./BrightnessBtn"
@@ -23,7 +25,11 @@ function Spacer(elem_name:string|null=null) {
 // Date Widget
 function Date() {
   const date_str = Variable("").poll(1000, 'date "+%a %b %d %H:%M:%S"')
-  return <label name="date" label={date_str()} />
+  return <label 
+    name="date" 
+    label={date_str()}
+    onDestroy={() => {date_str.drop()}} 
+  />
 }
 
 // Bar sections
@@ -86,7 +92,8 @@ function QuickAccessBar() {
 
 // Main bar
 export default function Bar(monitor_id: number) {
-  const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
+  const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
+  const hypr = Hyprland.get_default()
 
   return <window
     visible
@@ -97,6 +104,11 @@ export default function Bar(monitor_id: number) {
     layer={Astal.Layer.BOTTOM}
     keymode={Astal.Keymode.ON_DEMAND}
     application={App}
+    setup={(self) => {
+      hypr.connect('monitor-removed', (_source, id) => {
+        if (self.monitor == id) {self.destroy()}
+      })
+    }}
     child={
       <box
         cssClasses={["main-container"]}

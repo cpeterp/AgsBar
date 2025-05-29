@@ -35,6 +35,7 @@ export default function MicBtn() {
     name="mic-btn"
     tooltipText={bind(mic, "volume").as(vol => `Level ${Math.floor(vol*100)}%`)}
     iconName={bind(mic_icon)}
+    onDestroy={() => {mic_icon.drop()}}
     popover={ Popover(
       {
         autohide: true,
