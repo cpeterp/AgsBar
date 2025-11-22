@@ -101,7 +101,7 @@ export default function Bar(monitor_id: number) {
     monitor={monitor_id}
     exclusivity={Astal.Exclusivity.EXCLUSIVE}
     anchor={TOP | LEFT | RIGHT}
-    layer={Astal.Layer.BOTTOM}
+    layer={Astal.Layer.TOP}
     keymode={Astal.Keymode.ON_DEMAND}
     application={App}
     setup={(self) => {
