@@ -1,6 +1,6 @@
-import { App } from "astal/gtk4"
-import { monitorFile, readFileAsync } from "astal/file"
-import { exec } from "astal/process"
+import app from "ags/gtk4/app"
+import { monitorFile, readFileAsync } from "ags/file"
+import { exec } from "ags/process"
 import Hyprland from "gi://AstalHyprland"
 
 import Bar from "./widgets/Bar"
@@ -15,13 +15,13 @@ monitorFile(
     (file, event) => {
         console.log('Updating CSS')
         exec(`sassc ${scss} ${css}`)
-        App.reset_css()
-        App.apply_css(css);
+        app.reset_css()
+        app.apply_css(css);
     }
 )
 exec(`sassc ${scss} ${css}`)
 
-App.start({
+app.start({
     css: css,
     main() {
         // Create initial bars and watch for new monitors
