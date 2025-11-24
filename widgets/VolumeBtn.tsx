@@ -1,6 +1,8 @@
 import Gtk from "gi://Gtk?version=4.0"
-import { createBinding} from "ags"
+import { createBinding, createComputed} from "ags"
 import Wp from "gi://AstalWp"
+import {jsx} from "gnim"
+import Astal from "gi://Astal?version=4.0";
 
 export default function VolumeBtn() {
   const audio = Wp.get_default();
@@ -16,15 +18,18 @@ export default function VolumeBtn() {
     [0, 'low']
   ];
 
-  const speaker_icon = Variable.derive(
-    [bind(speaker, "volume"), bind(speaker, "mute")],
-    (vol, is_muted) => {
-      vol = vol * 100;
+  let volume = createBinding(speaker, "volume")
+  let isMuted = createBinding(speaker, "mute")
+
+  const speaker_icon = createComputed(
+    [volume, isMuted],
+    (volume, isMuted) => {
+      volume = volume * 100;
       let icon = null;
-      if (is_muted) {
+      if (isMuted) {
         icon = 'muted';
       } else {
-        icon = thresholds.find((threshold) => threshold[0] <= vol)?.[1];
+        icon = thresholds.find((threshold) => threshold[0] <= volume)?.[1];
       }
       return `audio-volume-${icon}-symbolic`;
     })
@@ -32,32 +37,33 @@ export default function VolumeBtn() {
   return <menubutton
     cssClasses={["quick-access-icon"]}
     name="volume-btn"
-    tooltipText={bind(speaker, "volume").as(vol => `Volume ${Math.floor(vol*100)}%`)}
-    iconName={bind(speaker_icon)}
-    onDestroy={() => {speaker_icon.drop()}}
-    popover={ Popover(
+    tooltipText={volume((vol) => `Volume ${Math.floor(vol*100)}%`)}
+    iconName={speaker_icon}
+    popover={ jsx(Gtk.Popover, 
       {
         autohide: true,
         hasArrow: false,
-        position: Gtk.PositionType.BOTTOM
-      },
-      <box>
-        <button
-          cssClasses={["volume-popover-mute-btn"]}
-          iconName={bind(speaker_icon)}
-          onClicked={() => {speaker.set_mute(!speaker.get_mute())}}
-        />
-        <slider
-          value={bind(speaker, "volume")}
-          onChangeValue={( {value}) => {
-            speaker.set_volume(value)
-          }}
-          widthRequest={150}
-          min={0}
-          max={1.2}
-          canFocus={false}
-        />
-      </box>)
+        position: Gtk.PositionType.BOTTOM,
+        child: jsx(Gtk.Box, {
+          children: [
+            jsx(Gtk.Button, {
+              cssClasses: ["volume-popover-mute-btn"],
+              iconName: speaker_icon,
+              onClicked: () => {speaker.set_mute(!speaker.get_mute())}
+            }),
+            jsx(Astal.Slider, {
+              value: volume,
+              onChangeValue: ({value}) => {
+                speaker.set_volume(value)
+              },
+              widthRequest: 150,
+              min: 0,
+              max: 1.2,
+              canFocus: false
+            })
+          ]
+        })
+      })
     }
   />
 }

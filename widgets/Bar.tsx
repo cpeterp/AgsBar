@@ -7,7 +7,7 @@ import Hyprland from "gi://AstalHyprland"
 import { MAIN_MONITOR } from "../user_config"
 import SystemTray from "./SystemTray"
 import BrightnessBtn from "./BrightnessBtn"
-// import VolumeBtn from "./VolumeBtn"
+import VolumeBtn from "./VolumeBtn"
 // import MicBtn from "./MicBtn"
 import BatteryBtn from "./BatteryBtn"
 import PowerBtn from "./PowerBtn"
@@ -30,7 +30,7 @@ function Date() {
   let date_str = createPoll("", 1000, 'date "+%a %b %d %H:%M:%S"')
   return <label 
     name="date" 
-    label={date_str((c) => c)}
+    label={date_str}
   />
 }
 
@@ -80,7 +80,7 @@ function QuickAccessBar() {
   const children = [
     SystemTray(),
     BrightnessBtn(),
-    // VolumeBtn(),
+    VolumeBtn(),
     // MicBtn(),
     BatteryBtn()
   ].filter(Boolean);   // removes null, undefined, false

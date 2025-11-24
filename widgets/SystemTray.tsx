@@ -11,7 +11,7 @@ export default function SystemTray() {
         let ag_handler: number;
         return <menubutton
           cssClasses={["quick-access-icon"]}
-          tooltipMarkup={createBinding(item, "tooltipMarkup").get()}
+          tooltipMarkup={createBinding(item, "tooltipMarkup")}
           menuModel={createBinding(item, "menuModel")}
           onDestroy={() => item.disconnect(ag_handler)}
           $={self => {
