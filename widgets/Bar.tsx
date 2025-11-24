@@ -1,8 +1,10 @@
 import app from "ags/gtk4/app"
 import Gtk from "gi://Gtk?version=4.0" 
+import Gdk from "gi://Gdk?version=4.0"
 import Astal from "gi://Astal?version=4.0"
 import { createPoll } from "ags/time"
 import Hyprland from "gi://AstalHyprland"
+import {onCleanup} from "ags"
 
 import { MAIN_MONITOR } from "../user_config"
 import SystemTray from "./SystemTray"
@@ -97,22 +99,31 @@ function QuickAccessBar() {
 
 // Main bar
 export default function Bar(monitor_id: number) {
+// export default function Bar(monitor: Gdk.Monitor) {
+  var win: Astal.Window
+  
   const { TOP, LEFT, RIGHT } = Astal.WindowAnchor;
   const hypr = Hyprland.get_default()
+  
+  onCleanup(() => {
+    // Root components (windows) are not automatically destroyed.
+    // When the monitor is disconnected from the system, this callback
+    // is run from the parent <For> which allows us to destroy the window
+    win.destroy()
+  })
 
   return <window
     visible
     cssClasses={["bar"]}
     monitor={monitor_id}
+    // gdkmonitor={monitor}
     exclusivity={Astal.Exclusivity.EXCLUSIVE}
     anchor={TOP | LEFT | RIGHT}
     layer={Astal.Layer.TOP}
     keymode={Astal.Keymode.ON_DEMAND}
     application={app}
     $={(self) => {
-      hypr.connect('monitor-removed', (_source, id) => {
-        if (self.monitor == id) {self.destroy()}
-      })
+      (win = self)
     }}
     >
       <box
