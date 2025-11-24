@@ -1,5 +1,5 @@
-import { Gtk } from "astal/gtk4"
-import { bind } from "astal"
+import Gtk from "gi://Gtk?version=4.0"
+import { createBinding } from "ags"
 import Battery from "gi://AstalBattery"
 import {BATTERY_LEVEL_CRITICAL, BATTERY_LEVEL_LOW } from "../user_config"
 
@@ -29,13 +29,15 @@ export default function BatteryBtn() {
       console.log(battery.icon_name);
       console.log(battery.battery_icon_name);
     }}
-    tooltip_text={bind(battery, "percentage").as(pct => `${Math.round(pct * 100)}%`)}
-    setup={(self) => {
+    tooltip_text={createBinding(battery, "percentage").as(pct => `${Math.round(pct * 100)}%`)}
+    $={(self) => {
       update_battery_state_class(self, battery.percentage)
-      bind(battery, "percentage").subscribe((pct) => {
-        update_battery_state_class(self, pct)
-      })
+      let pct = createBinding(battery, "percentage")
+      pct.subscribe(() => 
+        update_battery_state_class(self, pct.get())
+      )
     }}
-    child={<image iconName={bind(battery, "battery_icon_name")} />}
-  />
+    >
+      <image iconName={createBinding(battery, "battery_icon_name")} />
+  </button>
 }

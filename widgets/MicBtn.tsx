@@ -1,7 +1,6 @@
-import {Gtk } from "astal/gtk4"
-import { Variable, bind } from "astal"
+import Gtk from "gi://Gtk?version=4.0" 
+import { createBinding } from "ags"
 import Wp from "gi://AstalWp"
-import { Popover } from "astal/gtk4/widget"
 
 export default function MicBtn() {
   const audio = Wp.get_default()

@@ -1,22 +1,25 @@
-import { App, Astal, Gtk } from "astal/gtk4"
-import { Variable } from "astal"
+import app from "ags/gtk4/app"
+import Gtk from "gi://Gtk?version=4.0" 
+import Astal from "gi://Astal?version=4.0"
+import { createPoll } from "ags/time"
 import Hyprland from "gi://AstalHyprland"
 
 import { MAIN_MONITOR } from "../user_config"
 import SystemTray from "./SystemTray"
 import BrightnessBtn from "./BrightnessBtn"
-import VolumeBtn from "./VolumeBtn"
-import MicBtn from "./MicBtn"
+// import VolumeBtn from "./VolumeBtn"
+// import MicBtn from "./MicBtn"
 import BatteryBtn from "./BatteryBtn"
 import PowerBtn from "./PowerBtn"
 import WorkspacesSwitcher from "./WorkspaceSwitcher"
 import WindowInfo from "./WindowInfo"
+import { jsx } from "gnim"
 
 // Spacer Widget
 function Spacer(elem_name:string|null=null) {
   return <box 
     cssClasses={["spacer"]}
-    setup={(self) => {
+    $={(self) => {
       if (elem_name != null) {
         self.name = elem_name
       }
@@ -24,45 +27,44 @@ function Spacer(elem_name:string|null=null) {
 }
 // Date Widget
 function Date() {
-  const date_str = Variable("").poll(1000, 'date "+%a %b %d %H:%M:%S"')
+  let date_str = createPoll("", 1000, 'date "+%a %b %d %H:%M:%S"')
   return <label 
     name="date" 
-    label={date_str()}
-    onDestroy={() => {date_str.drop()}} 
+    label={date_str((c) => c)}
   />
 }
 
 // Bar sections
 function LeftBar({monitor_id}: {monitor_id: number}) {
-  return <box
-    cssClasses={['bar-box', 'left']}
-    homogeneous={false}
-    vertical={false}
-    hexpand
-    halign={Gtk.Align.START}
-    child={<WorkspacesSwitcher monitor_id = {monitor_id}/>}
-  />
+  return jsx(Gtk.Box, {
+    cssClasses: ['bar-box', 'left'],
+    homogeneous: false,
+    orientation: Gtk.Orientation.HORIZONTAL,
+    hexpand: true,
+    halign: Gtk.Align.START,
+    children: [<WorkspacesSwitcher monitor_id = {monitor_id}/>]
+  })
 }
 
 function MiddleBar() {
-  return <box
-    cssClasses={['bar-box', 'middle']}
-    homogeneous={false}
-    vertical={false}
-    hexpand
-    halign={Gtk.Align.CENTER}
-    child={<WindowInfo/>}
-  />
+  return jsx(Gtk.Box, {
+    cssClasses: ['bar-box', 'middle'],
+    homogeneous: false,
+    orientation: Gtk.Orientation.HORIZONTAL,
+    hexpand: true,
+    halign: Gtk.Align.CENTER,
+    children: [<WindowInfo/>]
+  })
 }
 
 function RightBar({ monitor_id }: { monitor_id: number }) {
-  return <box
-    cssClasses={['bar-box', 'middle']}
-    homogeneous={false}
-    vertical={false}
-    hexpand
-    halign={Gtk.Align.END}
-    children={monitor_id === MAIN_MONITOR ? [
+  return jsx(Gtk.Box, {
+    cssClasses: ['bar-box', 'right'],
+    homogeneous: false,
+    orientation: Gtk.Orientation.HORIZONTAL,
+    hexpand: true,
+    halign: Gtk.Align.END,
+    children: monitor_id === MAIN_MONITOR ? [
       QuickAccessBar(),
       Spacer(),
       <Date />,
@@ -70,24 +72,27 @@ function RightBar({ monitor_id }: { monitor_id: number }) {
       <PowerBtn />
     ] : [
       <Date />
-    ]}
-  />
+    ]
+  })
 }
 
 function QuickAccessBar() {
+  const children = [
+    SystemTray(),
+    BrightnessBtn(),
+    // VolumeBtn(),
+    // MicBtn(),
+    BatteryBtn()
+  ].filter(Boolean);   // removes null, undefined, false
+
   return <box
     name="quick-access-bar"
     homogeneous={false}
-    vertical={false}
+    orientation={Gtk.Orientation.HORIZONTAL}
     hexpand
     halign={Gtk.Align.END}
-  >
-    <SystemTray />
-    <BrightnessBtn />
-    <VolumeBtn />
-    <MicBtn />
-    <BatteryBtn />
-  </box>
+    children={children}
+  />
 }
 
 // Main bar
@@ -103,24 +108,23 @@ export default function Bar(monitor_id: number) {
     anchor={TOP | LEFT | RIGHT}
     layer={Astal.Layer.TOP}
     keymode={Astal.Keymode.ON_DEMAND}
-    application={App}
-    setup={(self) => {
+    application={app}
+    $={(self) => {
       hypr.connect('monitor-removed', (_source, id) => {
         if (self.monitor == id) {self.destroy()}
       })
     }}
-    child={
+    >
       <box
         cssClasses={["main-container"]}
         hexpand
         homogeneous
-        vertical={false}
+        orientation={Gtk.Orientation.HORIZONTAL}
         halign={Gtk.Align.FILL}
       >
         <LeftBar monitor_id={monitor_id}/>
         <MiddleBar />
         <RightBar monitor_id={monitor_id} />
       </box>
-    }
-  />
+    </window>
 }

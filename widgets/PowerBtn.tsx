@@ -1,6 +1,6 @@
-import { Gtk } from "astal/gtk4";
-import { Popover } from "astal/gtk4/widget";
-import { exec } from "astal";
+import Gtk from "gi://Gtk?version=4.0"
+import { exec } from "ags/process"
+import { jsx } from "gnim"
 
 
 export default function PowerBtn() {
@@ -15,29 +15,27 @@ export default function PowerBtn() {
     cssClasses={["quick-access-icon"]}
     iconName={"system-shutdown-symbolic"}
     name="power-btn"
-    popover={Popover(
+    popover={jsx(Gtk.Popover,
       {
         autohide: true,
         hasArrow: false,
-        position: Gtk.PositionType.BOTTOM
-      },
-      <box
-        name="power-btn-menu"
-        vertical={true}
-        children={
-          power_options.map((option) => {
+        position: Gtk.PositionType.BOTTOM,
+        child: jsx(Gtk.Box, {
+          name:"power-btn-menu",
+          orientation:Gtk.Orientation.VERTICAL,
+          children: power_options.map((option) => {
             return <button
               cssClasses={["power-btn-menu-item"]}
               onClicked={() => { exec(option[2])}}
-              child={
+            >
               <box>
                 <image iconName={option[1]}/>
                 <label>{option[0]}</label>
-              </box>}  
-            />
+              </box>
+            </button>
           })
-        }
-      />)
+        })
+      })
     }
   />
 } 

@@ -1,5 +1,5 @@
-import { Gtk } from "astal/gtk4"
-import { bind, Variable } from "astal"
+import Gtk from "gi://Gtk?version=4.0"
+import { createBinding } from "ags"
 import Hyprland from "gi://AstalHyprland"
 
 
@@ -9,14 +9,13 @@ export default function WindowInfo() {
   
   return <box 
     cssClasses={[]}
-    child={
-      <label>
-        {/* {bind(Variable.derive(
-          [bind(hypr, "focusedClient"), bind(hypr.focusedClient, "title")],
-          (client, title) => {
-            return hypr.focusedClient.title;
-        }))} */}
-        </label>
-    }
-  />
+  >
+    <label>
+      {/* {bind(Variable.derive(
+        [bind(hypr, "focusedClient"), bind(hypr.focusedClient, "title")],
+        (client, title) => {
+          return hypr.focusedClient.title;
+      }))} */}
+    </label>
+  </box>
 }
