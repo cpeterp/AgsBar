@@ -2,7 +2,7 @@ import Gtk from "gi://Gtk?version=4.0"
 import { createBinding, createComputed} from "ags"
 import Wp from "gi://AstalWp"
 import {jsx} from "gnim"
-import Astal from "gi://Astal?version=4.0";
+import Astal from "gi://Astal?version=4.0"
 
 export default function VolumeBtn() {
   const audio = Wp.get_default();

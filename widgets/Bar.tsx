@@ -8,7 +8,7 @@ import { MAIN_MONITOR } from "../user_config"
 import SystemTray from "./SystemTray"
 import BrightnessBtn from "./BrightnessBtn"
 import VolumeBtn from "./VolumeBtn"
-// import MicBtn from "./MicBtn"
+import MicBtn from "./MicBtn"
 import BatteryBtn from "./BatteryBtn"
 import PowerBtn from "./PowerBtn"
 import WorkspacesSwitcher from "./WorkspaceSwitcher"
@@ -81,7 +81,7 @@ function QuickAccessBar() {
     SystemTray(),
     BrightnessBtn(),
     VolumeBtn(),
-    // MicBtn(),
+    MicBtn(),
     BatteryBtn()
   ].filter(Boolean);   // removes null, undefined, false
 
