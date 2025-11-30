@@ -116,7 +116,6 @@ export default function Bar(monitor_id: number) {
     visible
     cssClasses={["bar"]}
     monitor={monitor_id}
-    // gdkmonitor={monitor}
     exclusivity={Astal.Exclusivity.EXCLUSIVE}
     anchor={TOP | LEFT | RIGHT}
     layer={Astal.Layer.TOP}
